@@ -38,7 +38,7 @@ function YamlBlock({ source, label }: { source: string; label: string }) {
 
 function WorkflowSteps({ steps }: { steps: string[][] }) {
   return (
-    <ol className="mt-5 list-decimal space-y-4 pl-5 marker:font-semibold marker:text-sage-800">
+    <ol className="mt-5 list-decimal space-y-4 pl-5 marker:font-semibold marker:text-accent-800">
       {steps.map(([title, description]) => (
         <li key={title} className="rounded-2xl border border-ink-200 bg-white p-4 sm:p-6">
           <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-6">
@@ -84,7 +84,7 @@ export function WorkflowGuide() {
       </section>
 
       <details className="mt-10 border-t border-ink-200 pt-5">
-        <summary className="mb-4 cursor-pointer font-semibold text-sage-800">Ver el archivo ci-cd.yml completo</summary>
+        <summary className="mb-4 cursor-pointer font-semibold text-accent-800">Ver el archivo ci-cd.yml completo</summary>
         <YamlBlock source={workflowSource} label="Archivo ci-cd.yml completo" />
       </details>
     </main>

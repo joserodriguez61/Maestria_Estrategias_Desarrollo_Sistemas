@@ -23,10 +23,10 @@ export function TaskForm({ onAdd }: { onAdd: (title: string) => void }) {
         maxLength={MAX_TITLE_LENGTH}
         required
         placeholder="¿Qué necesitas hacer?"
-        className="min-h-12 min-w-0 flex-1 rounded-2xl border border-ink-200 bg-ink-50 px-4 text-ink-950 placeholder:text-ink-500 focus:border-sage-500"
+        className="min-h-12 min-w-0 flex-1 rounded-2xl border border-ink-200 bg-ink-50 px-4 text-ink-950 placeholder:text-ink-500 focus:border-accent-500"
       />
       <button type="submit" disabled={normalizeTitle(value) === null}
-        className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-sage-700 px-5 font-semibold text-white hover:bg-sage-800 disabled:bg-sage-100 disabled:text-sage-800">
+        className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-accent-700 px-5 font-semibold text-white hover:bg-accent-800 disabled:bg-accent-100 disabled:text-accent-800">
         <Plus size={18} aria-hidden="true" /> Agregar tarea
       </button>
     </form>

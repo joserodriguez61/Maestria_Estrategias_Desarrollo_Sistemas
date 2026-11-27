@@ -46,7 +46,7 @@ export function ProjectOverview() {
           <dt className="text-lg font-bold text-ink-950">Entorno de integración</dt>
           <dd className="mt-2 text-ink-700">
             GitHub Actions usa Ubuntu 24.04 y Node.js 22. Consulta la <a href="#/guia-cicd"
-              className="font-semibold text-sage-800 underline">guía de CI/CD</a> para ver el flujo.
+              className="font-semibold text-accent-800 underline">guía de CI/CD</a> para ver el flujo.
           </dd>
         </div>
       </dl>
@@ -66,10 +66,10 @@ export function ProjectOverview() {
       <section className="mt-9">
         <h2 className="text-2xl font-bold text-ink-950">Compilación y pruebas</h2>
         <p className="mt-2 text-ink-700">Ejecuta estos comandos en orden desde la raíz del repositorio.</p>
-        <ol className="mt-4 list-decimal space-y-3 pl-5 marker:font-semibold marker:text-sage-800">
+        <ol className="mt-4 list-decimal space-y-3 pl-5 marker:font-semibold marker:text-accent-800">
           {commands.map(([command, description]) => (
             <li key={command} className="rounded-xl border border-ink-200 bg-white p-4">
-              <code className="rounded-md bg-sage-50 px-2 py-1 text-sm font-semibold text-sage-900">{command}</code>
+              <code className="rounded-md bg-accent-50 px-2 py-1 text-sm font-semibold text-accent-900">{command}</code>
               <p className="mt-2 text-ink-700">{description}</p>
             </li>
           ))}

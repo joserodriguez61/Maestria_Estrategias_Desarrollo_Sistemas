@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --color-sage-50: #f1f6ed;
-  --color-sage-100: #e4eee0;
-  --color-sage-200: #c9dcc5;
-  --color-sage-500: #5b826a;
-  --color-sage-600: #466e56;
-  --color-sage-700: #365f4a;
-  --color-sage-800: #2a503d;
-  --color-sage-900: #234333;
+  --color-accent-50: #eef5fc;
+  --color-accent-100: #e1edf9;
+  --color-accent-200: #c9def2;
+  --color-accent-500: #5a82af;
+  --color-accent-600: #416a98;
+  --color-accent-700: #345781;
+  --color-accent-800: #2a486f;
+  --color-accent-900: #223b5a;
   --color-ink-50: #faf8f3;
   --color-ink-100: #f1eee5;
   --color-ink-200: #e5e1d5;
-  --color-ink-400: #8b8d7e;
-  --color-ink-500: #62695d;
-  --color-ink-600: #555e53;
-  --color-ink-700: #48544a;
-  --color-ink-800: #39473d;
-  --color-ink-900: #303e34;
-  --color-ink-950: #23342a;
+  --color-ink-400: #8190a0;
+  --color-ink-500: #5f6b7a;
+  --color-ink-600: #505e6e;
+  --color-ink-700: #455363;
+  --color-ink-800: #374656;
+  --color-ink-900: #2d3b4d;
+  --color-ink-950: #223044;
 }
 
 @layer base {
   body {
     min-width: 280px;
     min-height: 100vh;
-    background: radial-gradient(ellipse at top right, #eaf1e5, transparent 42rem), #faf7ef;
+    background: radial-gradient(ellipse at top right, #e7f0fc, transparent 42rem), #faf7ef;
     font-family: "Segoe UI", system-ui, sans-serif;
   }
 
@@ -34,7 +34,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-sage-600);
+    outline: 2px solid var(--color-accent-600);
     outline-offset: 3px;
   }
 
