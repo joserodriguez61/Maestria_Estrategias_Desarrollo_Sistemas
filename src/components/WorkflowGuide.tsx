@@ -1,8 +1,15 @@
-import { useRef } from 'react'
 import workflowSource from '../../.github/workflows/ci-cd.yml?raw'
 
+const stepBlocks = new Map<string, string>()
+for (const match of workflowSource.matchAll(/^ {6}- name: (.+)\r?\n(?:^ {8}.*(?:\r?\n|$)|^\r?\n)*/gm)) {
+  stepBlocks.set(match[1], match[0].trimEnd().replace(/^ {6}/gm, ''))
+}
+
+const triggers = workflowSource.match(/^on:\r?\n(?:^ {2,}.*\r?\n)*/m)?.[0].trimEnd()
+const integrationCondition = workflowSource.match(/^ {2}ci:\r?\n(?:^ {4}.*\r?\n)*?^ {4}(if: .+)$/m)?.[1]
+
 const integrationSteps = [
-  ['Obtener el código', 'Descarga el código del commit que inició la ejecución.'],
+  ['Obtener el código', 'Descarga la revisión que GitHub Actions selecciona para la ejecución. En un PR abierto, valida el resultado de fusionar los cambios con la rama de destino.'],
   ['Configurar Node.js', 'Prepara Node.js 22 para ejecutar los comandos del proyecto.'],
   ['Instalar dependencias', 'Ejecuta npm ci para instalar las versiones fijadas en package-lock.json.'],
   ['Ejecutar ESLint', 'Revisa el código con las reglas de ESLint del proyecto.'],
@@ -12,7 +19,7 @@ const integrationSteps = [
   ['Compilar TaskFlow', 'Comprueba los tipos y usa Vite para generar la aplicación en dist/.'],
   ['Crear el ZIP y su suma de verificación SHA-256', 'Verifica que exista dist/index.html, comprime dist/ y calcula una suma para comprobar la integridad del ZIP.'],
   ['Publicar artefacto', 'Deja el ZIP y su suma disponibles para descargar en GitHub Actions durante 14 días.'],
-  ['Preparar el artefacto para GitHub Pages', 'En un push a main, entrega la carpeta dist/ al proceso de despliegue.'],
+  ['Preparar el artefacto para GitHub Pages', 'Cuando se ejecuta el workflow manualmente desde main, entrega la carpeta dist/ al proceso de despliegue.'],
 ]
 
 const deploymentSteps = [
@@ -21,50 +28,70 @@ const deploymentSteps = [
   ['Comprobar la página y el módulo JavaScript', 'Verifica que la página y su módulo JavaScript respondan correctamente y que el módulo tenga el tipo de contenido esperado. Reintenta hasta un total de seis veces.'],
 ]
 
-export function WorkflowGuide() {
-  const dialog = useRef<HTMLDialogElement>(null)
-
+function YamlBlock({ source, label }: { source: string; label: string }) {
   return (
-    <>
-      <button type="button" aria-haspopup="dialog" onClick={() => dialog.current?.showModal()}
-        className="ml-auto rounded-lg border border-indigo-200 px-3 py-2 text-sm font-semibold text-indigo-800 hover:bg-indigo-50">
-        Ver guía de CI/CD
-      </button>
-      <dialog ref={dialog} aria-labelledby="workflow-guide-title"
-        className="fixed inset-0 m-auto max-h-[85dvh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-5 text-slate-900 shadow-xl backdrop:bg-slate-950/50 sm:p-7">
-        <div className="flex items-center justify-between gap-4">
-          <h2 id="workflow-guide-title" className="text-xl font-bold">CI/CD paso a paso</h2>
-          <form method="dialog">
-            <button type="submit" className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold hover:bg-slate-50">
-              Cerrar
-            </button>
-          </form>
+    <pre tabIndex={0} aria-label={label}
+      className="min-w-0 overflow-auto rounded-xl bg-slate-950 p-4 text-sm leading-relaxed text-slate-100 sm:p-5">
+      <code>{source}</code>
+    </pre>
+  )
+}
+
+function WorkflowSteps({ steps }: { steps: string[][] }) {
+  return (
+    <ol className="mt-5 list-decimal space-y-4 pl-5 marker:font-semibold marker:text-indigo-800">
+      {steps.map(([title, description]) => (
+        <li key={title} className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
+          <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-950">{title}</h3>
+              <p className="mt-2 leading-relaxed text-slate-700">{description}</p>
+            </div>
+            <YamlBlock source={stepBlocks.get(title) ?? ''} label={`YAML de ${title}`} />
+          </div>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+export function WorkflowGuide() {
+  return (
+    <main className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-15">
+      <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">CI/CD paso a paso</h1>
+
+      <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+        <h2 className="text-2xl font-bold text-slate-950">Cuándo se ejecuta</h2>
+        <p className="mt-2 max-w-3xl leading-relaxed text-slate-700">
+          GitHub Actions recibe el evento al enviarse una revisión. La integración continua se ejecuta
+          cuando esa revisión aprueba un pull request dirigido a <code>main</code>. También se puede
+          iniciar el workflow manualmente.
+        </p>
+        <div className="mt-4">
+          <YamlBlock source={triggers ?? ''} label="YAML de los disparadores" />
         </div>
-        <p className="mt-4 text-sm text-slate-700">
-          El flujo se inicia con un push a main, incluido el que se genera al fusionar un PR, o al ejecutarlo manualmente desde GitHub Actions.
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-2xl font-bold text-slate-950">Integración continua</h2>
+        <div className="mt-4">
+          <YamlBlock source={integrationCondition ?? ''} label="Condición YAML de la integración continua" />
+        </div>
+        <WorkflowSteps steps={integrationSteps} />
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-2xl font-bold text-slate-950">Despliegue continuo</h2>
+        <p className="mt-2 leading-relaxed text-slate-700">
+          Se ejecuta después de una integración exitosa iniciada manualmente desde <code>main</code>.
         </p>
-        <h3 className="mt-6 font-bold">Integración continua</h3>
-        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-slate-700">
-          {integrationSteps.map(([title, description]) => (
-            <li key={title}><strong>{title}.</strong> {description}</li>
-          ))}
-        </ol>
-        <h3 className="mt-6 font-bold">Despliegue continuo</h3>
-        <p className="mt-2 text-sm text-slate-700">
-          Se ejecuta después de una integración exitosa iniciada por un push a main.
-        </p>
-        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-slate-700">
-          {deploymentSteps.map(([title, description]) => (
-            <li key={title}><strong>{title}.</strong> {description}</li>
-          ))}
-        </ol>
-        <details className="mt-6 border-t border-slate-200 pt-4">
-          <summary className="cursor-pointer font-semibold text-indigo-800">Ver el archivo ci-cd.yml</summary>
-          <pre tabIndex={0} className="mt-3 max-h-80 overflow-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-            <code>{workflowSource}</code>
-          </pre>
-        </details>
-      </dialog>
-    </>
+        <WorkflowSteps steps={deploymentSteps} />
+      </section>
+
+      <details className="mt-10 border-t border-slate-200 pt-5">
+        <summary className="mb-4 cursor-pointer font-semibold text-indigo-800">Ver el archivo ci-cd.yml completo</summary>
+        <YamlBlock source={workflowSource} label="Archivo ci-cd.yml completo" />
+      </details>
+    </main>
   )
 }

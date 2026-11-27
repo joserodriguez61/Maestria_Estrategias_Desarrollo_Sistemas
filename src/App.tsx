@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CircleCheck, ListChecks } from 'lucide-react'
 import { WorkflowGuide } from './components/WorkflowGuide'
 import { TaskForm } from './components/TaskForm'
@@ -16,10 +16,21 @@ function loadState() {
 }
 
 export default function App() {
+  const [showGuide, setShowGuide] = useState(() => window.location.hash === '#/guia-cicd')
   const [initial] = useState(loadState)
   const [tasks, setTasks] = useState<Task[]>(initial.tasks)
   const [saveFailed, setSaveFailed] = useState(false)
   const completed = tasks.filter((task) => task.completed).length
+
+  useEffect(() => {
+    function updateRoute() {
+      setShowGuide(window.location.hash === '#/guia-cicd')
+      window.scrollTo(0, 0)
+    }
+
+    window.addEventListener('hashchange', updateRoute)
+    return () => window.removeEventListener('hashchange', updateRoute)
+  }, [])
 
   function update(next: Task[]) {
     setTasks(next)
@@ -40,10 +51,13 @@ export default function App() {
             <ListChecks size={21} aria-hidden="true" />
           </span>
           <span className="text-xl font-bold tracking-tight text-slate-950">TaskFlow</span>
-          <WorkflowGuide />
+          <a href={showGuide ? '#/' : '#/guia-cicd'}
+            className="ml-auto rounded-lg border border-indigo-200 px-3 py-2 text-sm font-semibold text-indigo-800 hover:bg-indigo-50">
+            {showGuide ? 'Volver a mis tareas' : 'Ver guía de CI/CD'}
+          </a>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-15">
+      {showGuide ? <WorkflowGuide /> : <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-15">
         <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">Mis tareas</h1>
         <p className="mt-3 text-slate-600">Organiza lo que tienes por hacer y sigue tu progreso.</p>
         <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
@@ -66,7 +80,7 @@ export default function App() {
               onRemove={(id) => update(removeTask(tasks, id))} />
           </section>
         </div>
-      </main>
+      </main>}
     </>
   )
 }
