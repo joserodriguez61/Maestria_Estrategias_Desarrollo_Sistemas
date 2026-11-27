@@ -34,7 +34,7 @@ Las tareas se guardan en el perfil y origen actuales del navegador. Si el almace
 
 ## CI/CD con GitHub Actions y GitHub Pages
 
-El workflow [TaskFlow CI/CD](.github/workflows/ci-cd.yml) ejecuta CI con Node.js 22 en pushes a `main`, pull requests con destino a `main` y ejecuciones manuales. Instala con `npm ci`, ejecuta ESLint, TypeScript y Vitest, bloquea vulnerabilidades altas y críticas con `npm audit --audit-level=high` y compila la aplicación. El ZIP `taskflow-<SHA>.zip` y su checksum SHA-256 quedan disponibles en la pestaña **Actions**.
+El workflow [TaskFlow CI/CD](.github/workflows/ci-cd.yml) ejecuta CI con Node.js 22 en pushes a `main` y ejecuciones manuales. Instala con `npm ci`, ejecuta ESLint, TypeScript y Vitest, bloquea vulnerabilidades altas y críticas con `npm audit --audit-level=high` y compila la aplicación. El ZIP `taskflow-<SHA>.zip` y su checksum SHA-256 quedan disponibles en la pestaña **Actions**.
 
 En un push a `main` con CI exitoso, el workflow entrega la misma carpeta `dist/` como artefacto de Pages. CD publica ese artefacto en el entorno `github-pages` sin volver a compilar y verifica por HTTP la página y el tipo MIME de su módulo JavaScript.
 
