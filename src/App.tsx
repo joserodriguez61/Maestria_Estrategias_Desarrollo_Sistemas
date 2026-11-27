@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CircleCheck, ListChecks } from 'lucide-react'
+import { WorkflowGuide } from './components/WorkflowGuide'
 import { TaskForm } from './components/TaskForm'
 import { TaskList } from './components/TaskList'
 import { readTasks, saveTasks } from './services/taskStorage'
@@ -39,6 +40,7 @@ export default function App() {
             <ListChecks size={21} aria-hidden="true" />
           </span>
           <span className="text-xl font-bold tracking-tight text-slate-950">TaskFlow</span>
+          <WorkflowGuide />
         </div>
       </header>
       <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-15">
