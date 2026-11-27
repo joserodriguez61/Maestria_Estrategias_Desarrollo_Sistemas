@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { CircleCheck, ListChecks } from 'lucide-react'
 import { ProjectOverview } from './components/ProjectOverview'
+import { RequirementPage } from './components/RequirementPage'
+import { requirementPages } from './components/requirementPages'
 import { WorkflowGuide } from './components/WorkflowGuide'
 import { TaskForm } from './components/TaskForm'
 import { TaskList } from './components/TaskList'
@@ -12,6 +14,7 @@ const navigation = [
   { href: '#/', label: 'Mis tareas' },
   { href: '#/guia-cicd', label: 'Guía de CI/CD' },
   { href: '#/ficha-tecnica', label: 'Ficha técnica' },
+  ...requirementPages.map(({ href, label }) => ({ href, label })),
 ]
 
 function loadState() {
@@ -24,6 +27,7 @@ function loadState() {
 
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash || '#/')
+  const requirementPage = requirementPages.find(({ href }) => href === route)
   const [initial] = useState(loadState)
   const [tasks, setTasks] = useState<Task[]>(initial.tasks)
   const [saveFailed, setSaveFailed] = useState(false)
@@ -68,7 +72,8 @@ export default function App() {
           </nav>
         </div>
       </header>
-      {route === '#/guia-cicd' ? <WorkflowGuide /> : route === '#/ficha-tecnica' ? <ProjectOverview /> : (
+      {requirementPage ? <RequirementPage page={requirementPage} /> :
+        route === '#/guia-cicd' ? <WorkflowGuide /> : route === '#/ficha-tecnica' ? <ProjectOverview /> : (
         <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-15">
         <div className="rounded-3xl border border-sage-200 bg-sage-50 px-6 py-7 sm:px-8 sm:py-9">
           <h1 className="text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">Mis tareas</h1>

@@ -30,7 +30,10 @@ export function ProjectOverview() {
         </div>
         <div className="rounded-2xl border border-ink-200 bg-white p-5">
           <dt className="text-lg font-bold text-ink-950">Licencia del proyecto</dt>
-          <dd className="mt-2 text-ink-700">Código propio. El repositorio no declara una licencia para el código de TaskFlow.</dd>
+          <dd className="mt-2 text-ink-700">
+            TaskFlow es una aplicación de código propio distribuida bajo la licencia MIT.
+            El texto completo se encuentra en el archivo <code>LICENSE</code> del repositorio.
+          </dd>
         </div>
         <div className="rounded-2xl border border-ink-200 bg-white p-5">
           <dt className="text-lg font-bold text-ink-950">Entorno local</dt>
