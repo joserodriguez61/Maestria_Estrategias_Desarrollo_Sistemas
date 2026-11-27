@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    min-width: 280px;
+    min-height: 100vh;
+    background: #f7f8ff;
+    background: radial-gradient(ellipse at top right, #eeefff, transparent 62%), #f7f8ff;
+    font-family: "Segoe UI", system-ui, sans-serif;
+  }
+
+  :focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 3px;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}
