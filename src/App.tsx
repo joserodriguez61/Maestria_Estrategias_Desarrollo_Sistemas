@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react'
 import { CircleCheck, ListChecks } from 'lucide-react'
+import { ProjectOverview } from './components/ProjectOverview'
 import { WorkflowGuide } from './components/WorkflowGuide'
 import { TaskForm } from './components/TaskForm'
 import { TaskList } from './components/TaskList'
 import { readTasks, saveTasks } from './services/taskStorage'
 import type { Task } from './types/task'
 import { removeTask, toggleTask } from './utils/tasks'
+
+const navigation = [
+  { href: '#/', label: 'Mis tareas' },
+  { href: '#/guia-cicd', label: 'Guía de CI/CD' },
+  { href: '#/ficha-tecnica', label: 'Ficha técnica' },
+]
 
 function loadState() {
   try {
@@ -16,7 +23,7 @@ function loadState() {
 }
 
 export default function App() {
-  const [showGuide, setShowGuide] = useState(() => window.location.hash === '#/guia-cicd')
+  const [route, setRoute] = useState(() => window.location.hash || '#/')
   const [initial] = useState(loadState)
   const [tasks, setTasks] = useState<Task[]>(initial.tasks)
   const [saveFailed, setSaveFailed] = useState(false)
@@ -24,7 +31,7 @@ export default function App() {
 
   useEffect(() => {
     function updateRoute() {
-      setShowGuide(window.location.hash === '#/guia-cicd')
+      setRoute(window.location.hash || '#/')
       window.scrollTo(0, 0)
     }
 
@@ -46,18 +53,23 @@ export default function App() {
   return (
     <>
       <header className="border-b border-indigo-100 bg-white">
-        <div className="mx-auto flex h-17 max-w-5xl items-center gap-3 px-5 sm:px-8">
+        <div className="mx-auto flex min-h-17 max-w-5xl flex-wrap items-center gap-3 px-5 py-3 sm:px-8">
           <span className="grid size-9 place-items-center rounded-xl bg-indigo-700 text-white">
             <ListChecks size={21} aria-hidden="true" />
           </span>
           <span className="text-xl font-bold tracking-tight text-slate-950">TaskFlow</span>
-          <a href={showGuide ? '#/' : '#/guia-cicd'}
-            className="ml-auto rounded-lg border border-indigo-200 px-3 py-2 text-sm font-semibold text-indigo-800 hover:bg-indigo-50">
-            {showGuide ? 'Volver a mis tareas' : 'Ver guía de CI/CD'}
-          </a>
+          <nav aria-label="Navegación principal" className="flex flex-wrap gap-1 sm:ml-auto">
+            {navigation.map(({ href, label }) => (
+              <a key={href} href={href} aria-current={route === href ? 'page' : undefined}
+                className="rounded-lg px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-indigo-50 aria-[current=page]:bg-indigo-100 aria-[current=page]:text-indigo-900">
+                {label}
+              </a>
+            ))}
+          </nav>
         </div>
       </header>
-      {showGuide ? <WorkflowGuide /> : <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-15">
+      {route === '#/guia-cicd' ? <WorkflowGuide /> : route === '#/ficha-tecnica' ? <ProjectOverview /> : (
+        <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-15">
         <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">Mis tareas</h1>
         <p className="mt-3 text-slate-600">Organiza lo que tienes por hacer y sigue tu progreso.</p>
         <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
@@ -80,7 +92,8 @@ export default function App() {
               onRemove={(id) => update(removeTask(tasks, id))} />
           </section>
         </div>
-      </main>}
+        </main>
+      )}
     </>
   )
 }
