@@ -2,6 +2,30 @@
 
 Aplicación web de gestión de tareas en español, desarrollada con React, TypeScript, Vite y Tailwind CSS. Puedes agregar tareas, marcar o desmarcar su estado y eliminarlas. Las tareas se conservan al recargar gracias a LocalStorage.
 
+## Reproducción desde cero
+
+1. Instala Git, npm y Node.js 22.12 o posterior dentro de la rama 22 para usar la misma rama principal que CI. Comprueba las versiones con `git --version`, `node --version` y `npm --version`. CI usa Ubuntu 24.04 y Node.js 22.
+2. Clona el repositorio con una cuenta que tenga acceso o descarga y extrae el ZIP del código fuente desde **Code → Download ZIP**. Abre la carpeta que contiene `package.json` y `package-lock.json`.
+
+   ```bash
+   git clone https://github.com/joserodriguez61/Maestria_Estrategias_Desarrollo_Sistemas.git
+   cd Maestria_Estrategias_Desarrollo_Sistemas
+   ```
+
+3. Instala las dependencias fijadas, valida el código, ejecuta las pruebas y compila.
+
+   ```bash
+   npm ci
+   npm run lint
+   npm test
+   npm run build
+   ```
+
+   La aplicación local funciona sin un archivo `.env`. Los comandos deben terminar correctamente y la compilación debe generar `dist/index.html`.
+
+4. Ejecuta `npm run preview` y abre en el navegador la URL que indique Vite, normalmente `http://localhost:4173/`. Agrega una tarea y recarga la página para comprobar que se conserva.
+5. Para obtener una URL de GitHub Pages, sigue los pasos de [habilitación de la publicación](#habilitar-la-publicación). Abre la URL del entorno `github-pages` cuando CI y CD hayan terminado correctamente. El workflow asigna automáticamente `SITE_URL` para verificar la página y su módulo JavaScript.
+
 ## Desarrollo local
 
 Requiere Node.js 20.19 o superior en la rama 20, o Node.js 22.12 o posterior, y npm.
