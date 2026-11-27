@@ -30,7 +30,7 @@ const deploymentSteps = [
 function YamlBlock({ source, label }: { source: string; label: string }) {
   return (
     <pre tabIndex={0} aria-label={label}
-      className="min-w-0 overflow-auto rounded-xl bg-ink-950 p-4 text-sm leading-relaxed text-ink-100 sm:p-5">
+      className="min-w-0 overflow-auto rounded-xl bg-ink-950 p-4 text-sm leading-relaxed text-ink-100 sm:p-5 md:text-base">
       <code>{source}</code>
     </pre>
   )
@@ -57,7 +57,7 @@ function WorkflowSteps({ steps }: { steps: string[][] }) {
 export function WorkflowGuide() {
   return (
     <main className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-15">
-      <h1 className="text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">CI/CD paso a paso</h1>
+      <h1 className="text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">7. Guía del YAML de CI/CD</h1>
 
       <section className="mt-8 rounded-2xl border border-ink-200 bg-white p-5 sm:p-6">
         <h2 className="text-2xl font-bold text-ink-950">Cuándo se ejecuta</h2>

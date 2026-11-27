@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CircleCheck, ListChecks } from 'lucide-react'
+import { ArrowRight, CircleCheck, ListChecks } from 'lucide-react'
 import { ProjectOverview } from './components/ProjectOverview'
 import { RequirementPage } from './components/RequirementPage'
 import { requirementPages } from './components/requirementPages'
@@ -12,9 +12,9 @@ import { removeTask, toggleTask } from './utils/tasks'
 
 const navigation = [
   { href: '#/', label: 'Mis tareas' },
-  { href: '#/guia-cicd', label: 'Guía de CI/CD' },
-  { href: '#/ficha-tecnica', label: 'Ficha técnica' },
+  { href: '#/ficha-tecnica', label: '1. Ficha técnica' },
   ...requirementPages.map(({ href, label }) => ({ href, label })),
+  { href: '#/guia-cicd', label: '7. Guía del YAML' },
 ]
 
 function loadState() {
@@ -27,6 +27,8 @@ function loadState() {
 
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash || '#/')
+  const routeIndex = navigation.findIndex(({ href }) => href === route)
+  const nextPage = navigation[routeIndex + 1]
   const requirementPage = requirementPages.find(({ href }) => href === route)
   const [initial] = useState(loadState)
   const [tasks, setTasks] = useState<Task[]>(initial.tasks)
@@ -100,6 +102,17 @@ export default function App() {
           </section>
         </div>
         </main>
+      )}
+      {nextPage && (
+        <footer className="mx-auto w-full max-w-5xl px-5 pb-10 sm:px-8">
+          <nav aria-label="Continuar la exposición" className="flex justify-end border-t border-ink-200 pt-5">
+            <a href={nextPage.href}
+              className="inline-flex items-center gap-3 rounded-xl bg-accent-700 px-4 py-3 font-semibold text-white hover:bg-accent-800">
+              <span>Siguiente · {nextPage.label}</span>
+              <ArrowRight size={20} className="shrink-0" aria-hidden="true" />
+            </a>
+          </nav>
+        </footer>
       )}
     </>
   )

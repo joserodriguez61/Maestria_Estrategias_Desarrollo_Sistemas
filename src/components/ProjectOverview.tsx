@@ -17,7 +17,7 @@ const commands = [
 export function ProjectOverview() {
   return (
     <main className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-8 sm:py-15">
-      <h1 className="text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">Ficha técnica de TaskFlow</h1>
+      <h1 className="text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">1. Ficha técnica de TaskFlow</h1>
       <p className="mt-4 max-w-3xl leading-relaxed text-ink-700">
         TaskFlow es la aplicación web de código propio seleccionada para el ejercicio.
         Permite agregar, completar y eliminar tareas, y conserva los cambios en el navegador mediante LocalStorage.
@@ -69,7 +69,7 @@ export function ProjectOverview() {
         <ol className="mt-4 list-decimal space-y-3 pl-5 marker:font-semibold marker:text-accent-800">
           {commands.map(([command, description]) => (
             <li key={command} className="rounded-xl border border-ink-200 bg-white p-4">
-              <code className="rounded-md bg-accent-50 px-2 py-1 text-sm font-semibold text-accent-900">{command}</code>
+              <code className="rounded-md bg-accent-50 px-2 py-1 text-sm font-semibold text-accent-900 md:text-base">{command}</code>
               <p className="mt-2 text-ink-700">{description}</p>
             </li>
           ))}

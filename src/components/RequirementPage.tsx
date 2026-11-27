@@ -12,7 +12,7 @@ export function RequirementPage({ page }: { page: (typeof requirementPages)[numb
             <h2 className="text-xl font-bold text-ink-950">{title}</h2>
             <p className="mt-2 leading-relaxed text-ink-700">{description}</p>
             {evidence && (
-              <code className="mt-3 block overflow-x-auto whitespace-pre-wrap rounded-xl bg-accent-50 p-3 text-sm text-accent-900">
+              <code className="mt-3 block overflow-x-auto whitespace-pre-wrap rounded-xl bg-accent-50 p-3 text-sm text-accent-900 md:text-base">
                 {evidence}
               </code>
             )}
@@ -20,9 +20,6 @@ export function RequirementPage({ page }: { page: (typeof requirementPages)[numb
         ))}
       </ol>
 
-      <a href="#/guia-cicd" className="mt-6 inline-block font-semibold text-accent-800 underline">
-        Ver el workflow paso a paso
-      </a>
     </main>
   )
 }
