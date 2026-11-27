@@ -34,14 +34,14 @@ Las tareas se guardan en el perfil y origen actuales del navegador. Si el almace
 
 ## CI/CD con GitHub Actions y GitHub Pages
 
-El workflow [TaskFlow CI/CD](.github/workflows/ci-cd.yml) ejecuta CI con Node.js 22 al enviarse una revisión de aprobación para un pull request dirigido a `main` y en ejecuciones manuales. Las revisiones con comentarios o solicitudes de cambios omiten el trabajo de CI. El flujo instala con `npm ci`, ejecuta ESLint, TypeScript y Vitest, bloquea vulnerabilidades altas y críticas con `npm audit --audit-level=high` y compila la aplicación. El ZIP `taskflow-<SHA>.zip` y su suma de verificación SHA-256 quedan disponibles en la pestaña **Actions**.
+El workflow [TaskFlow CI/CD](.github/workflows/ci-cd.yml) ejecuta CI con Node.js 22 únicamente cuando un push actualiza `main`, incluido el que genera la fusión de un pull request. El flujo instala con `npm ci`, ejecuta ESLint, TypeScript y Vitest, bloquea vulnerabilidades altas y críticas con `npm audit --audit-level=high` y compila la aplicación. El ZIP `taskflow-<SHA>.zip` y su suma de verificación SHA-256 quedan disponibles en la pestaña **Actions**.
 
-En una ejecución manual desde `main` con CI exitoso, el workflow entrega la misma carpeta `dist/` como artefacto de Pages. CD publica ese artefacto en el entorno `github-pages` y verifica por HTTP la página y el tipo MIME de su módulo JavaScript.
+Si CI termina correctamente y el commit sigue siendo el más reciente en `main`, CD publica el artefacto de `dist/` en el entorno `github-pages` y verifica por HTTP la página y el tipo MIME de su módulo JavaScript.
 
 ### Habilitar la publicación
 
 1. En el repositorio de GitHub, abre **Settings → Pages**.
 2. En **Build and deployment → Source**, selecciona **GitHub Actions**. [Configurar la fuente de publicación](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
-3. Con los cambios en `main`, abre **Actions → TaskFlow CI/CD → Run workflow** y selecciona `main`. Cuando termine el despliegue, abre la URL que muestra el entorno `github-pages`.
+3. Sube o fusiona los cambios a `main`. Cuando termine el despliegue, abre la URL que muestra el entorno `github-pages`.
 
 La compilación utiliza rutas relativas para servir el favicon, CSS y JavaScript tanto bajo la ruta del repositorio como en la raíz de un dominio. Las tareas del dominio anterior permanecen en el LocalStorage de ese dominio.

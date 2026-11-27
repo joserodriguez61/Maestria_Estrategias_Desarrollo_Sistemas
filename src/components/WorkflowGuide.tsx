@@ -6,10 +6,9 @@ for (const match of workflowSource.matchAll(/^ {6}- name: (.+)\r?\n(?:^ {8}.*(?:
 }
 
 const triggers = workflowSource.match(/^on:\r?\n(?:^ {2,}.*\r?\n)*/m)?.[0].trimEnd()
-const integrationCondition = workflowSource.match(/^ {2}ci:\r?\n(?:^ {4}.*\r?\n)*?^ {4}(if: .+)$/m)?.[1]
 
 const integrationSteps = [
-  ['Obtener el código', 'Descarga la revisión que GitHub Actions selecciona para la ejecución. En un PR abierto, valida el resultado de fusionar los cambios con la rama de destino.'],
+  ['Obtener el código', 'Descarga el código del commit enviado a main que inició la ejecución.'],
   ['Configurar Node.js', 'Prepara Node.js 22 para ejecutar los comandos del proyecto.'],
   ['Instalar dependencias', 'Ejecuta npm ci para instalar las versiones fijadas en package-lock.json.'],
   ['Ejecutar ESLint', 'Revisa el código con las reglas de ESLint del proyecto.'],
@@ -19,7 +18,7 @@ const integrationSteps = [
   ['Compilar TaskFlow', 'Comprueba los tipos y usa Vite para generar la aplicación en dist/.'],
   ['Crear el ZIP y su suma de verificación SHA-256', 'Verifica que exista dist/index.html, comprime dist/ y calcula una suma para comprobar la integridad del ZIP.'],
   ['Publicar artefacto', 'Deja el ZIP y su suma disponibles para descargar en GitHub Actions durante 14 días.'],
-  ['Preparar el artefacto para GitHub Pages', 'Cuando se ejecuta el workflow manualmente desde main, entrega la carpeta dist/ al proceso de despliegue.'],
+  ['Preparar el artefacto para GitHub Pages', 'Entrega la carpeta dist/ al proceso de despliegue.'],
 ]
 
 const deploymentSteps = [
@@ -63,9 +62,8 @@ export function WorkflowGuide() {
       <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
         <h2 className="text-2xl font-bold text-slate-950">Cuándo se ejecuta</h2>
         <p className="mt-2 max-w-3xl leading-relaxed text-slate-700">
-          GitHub Actions recibe el evento al enviarse una revisión. La integración continua se ejecuta
-          cuando esa revisión aprueba un pull request dirigido a <code>main</code>. También se puede
-          iniciar el workflow manualmente.
+          GitHub Actions ejecuta el flujo únicamente cuando un <code>push</code> actualiza <code>main</code>,
+          incluido el que se genera al fusionar un pull request.
         </p>
         <div className="mt-4">
           <YamlBlock source={triggers ?? ''} label="YAML de los disparadores" />
@@ -74,16 +72,13 @@ export function WorkflowGuide() {
 
       <section className="mt-10">
         <h2 className="text-2xl font-bold text-slate-950">Integración continua</h2>
-        <div className="mt-4">
-          <YamlBlock source={integrationCondition ?? ''} label="Condición YAML de la integración continua" />
-        </div>
         <WorkflowSteps steps={integrationSteps} />
       </section>
 
       <section className="mt-10">
         <h2 className="text-2xl font-bold text-slate-950">Despliegue continuo</h2>
         <p className="mt-2 leading-relaxed text-slate-700">
-          Se ejecuta después de una integración exitosa iniciada manualmente desde <code>main</code>.
+          Se ejecuta cuando la integración del commit enviado a <code>main</code> termina correctamente.
         </p>
         <WorkflowSteps steps={deploymentSteps} />
       </section>
