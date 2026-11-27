@@ -1,7 +1,26 @@
 export const requirementPages = [
   {
+    href: '#/niveles-cicd',
+    label: '3. Niveles de CI/CD',
+    summary: 'TaskFlow implementa despliegue continuo. Cuando CI pasa y el commit sigue siendo el más reciente de main, GitHub Actions publica automáticamente la compilación en GitHub Pages.',
+    requirements: [
+      {
+        title: 'Integración continua',
+        description: 'Automatiza la validación del código integrado. TaskFlow aplica ESLint, valida los tipos con TypeScript, ejecuta pruebas con Vitest, audita dependencias y compila con Vite.',
+      },
+      {
+        title: 'Entrega continua',
+        description: 'Mantiene una versión validada y lista para publicar. El paso a producción requiere una decisión manual. El ZIP de TaskFlow y su suma SHA-256 muestran cómo se prepara un paquete verificable.',
+      },
+      {
+        title: 'Despliegue continuo',
+        description: 'Publica automáticamente los cambios que superan las validaciones. TaskFlow sirve en GitHub Pages el mismo artefacto que salió de CI y luego verifica la página y su módulo JavaScript.',
+      },
+    ],
+  },
+  {
     href: '#/canalizacion-minima',
-    label: 'Canalización mínima',
+    label: '4. Canalización mínima',
     summary: 'TaskFlow cumple los cinco requisitos. Cada ejecución parte de un commit y produce una compilación probada y un paquete identificable.',
     requirements: [
       {
@@ -33,7 +52,7 @@ export const requirementPages = [
   },
   {
     href: '#/calidad-y-seguridad',
-    label: 'Calidad y seguridad',
+    label: '5. Calidad y seguridad',
     summary: 'TaskFlow cumple las medidas básicas con el historial de Git, permisos limitados y controles automáticos que deben pasar antes de publicar.',
     requirements: [
       {
@@ -63,7 +82,7 @@ export const requirementPages = [
   },
   {
     href: '#/reproduccion',
-    label: 'Reproducción desde cero',
+    label: '6. Reproducción desde cero',
     summary: 'Sigue este procedimiento para obtener el código de TaskFlow, comprobar la compilación en tu navegador y publicarla en GitHub Pages.',
     requirements: [
       {
