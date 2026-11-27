@@ -1,8 +1,8 @@
 name: TaskFlow CI/CD
 
 on:
-  push:
-    branches: [main]
+  pull_request_review:
+    types: [submitted]
   workflow_dispatch:
 
 permissions: {}
@@ -10,6 +10,7 @@ permissions: {}
 jobs:
   ci:
     name: Integración continua
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
@@ -60,7 +61,7 @@ jobs:
           retention-days: 14
 
       - name: Preparar el artefacto para GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: dist
@@ -68,7 +69,7 @@ jobs:
   cd:
     name: Despliegue continuo
     needs: ci
-    if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ success() && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
