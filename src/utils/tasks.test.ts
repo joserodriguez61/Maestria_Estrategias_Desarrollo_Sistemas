@@ -6,7 +6,7 @@ const other = { id: '2', title: 'Enviar informe', completed: true }
 
 describe('Títulos de tareas', () => {
   it('elimina espacios al principio y al final', () => {
-    expect(normalizeTitle('  Preparar informe  ')).toBe('Falla controlada')
+    expect(normalizeTitle('  Preparar informe  ')).toBe(task.title)
   })
 
   it('rechaza entradas vacías o que superan el límite', () => {
