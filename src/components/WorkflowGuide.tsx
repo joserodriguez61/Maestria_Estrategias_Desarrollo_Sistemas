@@ -30,7 +30,7 @@ const deploymentSteps = [
 function YamlBlock({ source, label }: { source: string; label: string }) {
   return (
     <pre tabIndex={0} aria-label={label}
-      className="min-w-0 overflow-auto rounded-xl bg-slate-950 p-4 text-sm leading-relaxed text-slate-100 sm:p-5">
+      className="min-w-0 overflow-auto rounded-xl bg-ink-950 p-4 text-sm leading-relaxed text-ink-100 sm:p-5">
       <code>{source}</code>
     </pre>
   )
@@ -38,13 +38,13 @@ function YamlBlock({ source, label }: { source: string; label: string }) {
 
 function WorkflowSteps({ steps }: { steps: string[][] }) {
   return (
-    <ol className="mt-5 list-decimal space-y-4 pl-5 marker:font-semibold marker:text-indigo-800">
+    <ol className="mt-5 list-decimal space-y-4 pl-5 marker:font-semibold marker:text-sage-800">
       {steps.map(([title, description]) => (
-        <li key={title} className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
+        <li key={title} className="rounded-2xl border border-ink-200 bg-white p-4 sm:p-6">
           <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-6">
             <div>
-              <h3 className="text-lg font-semibold text-slate-950">{title}</h3>
-              <p className="mt-2 leading-relaxed text-slate-700">{description}</p>
+              <h3 className="text-lg font-semibold text-ink-950">{title}</h3>
+              <p className="mt-2 leading-relaxed text-ink-700">{description}</p>
             </div>
             <YamlBlock source={stepBlocks.get(title) ?? ''} label={`YAML de ${title}`} />
           </div>
@@ -57,11 +57,11 @@ function WorkflowSteps({ steps }: { steps: string[][] }) {
 export function WorkflowGuide() {
   return (
     <main className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-15">
-      <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">CI/CD paso a paso</h1>
+      <h1 className="text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">CI/CD paso a paso</h1>
 
-      <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
-        <h2 className="text-2xl font-bold text-slate-950">Cuándo se ejecuta</h2>
-        <p className="mt-2 max-w-3xl leading-relaxed text-slate-700">
+      <section className="mt-8 rounded-2xl border border-ink-200 bg-white p-5 sm:p-6">
+        <h2 className="text-2xl font-bold text-ink-950">Cuándo se ejecuta</h2>
+        <p className="mt-2 max-w-3xl leading-relaxed text-ink-700">
           GitHub Actions ejecuta el flujo únicamente cuando un <code>push</code> actualiza <code>main</code>,
           incluido el que se genera al fusionar un pull request.
         </p>
@@ -71,20 +71,20 @@ export function WorkflowGuide() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-2xl font-bold text-slate-950">Integración continua</h2>
+        <h2 className="text-2xl font-bold text-ink-950">Integración continua</h2>
         <WorkflowSteps steps={integrationSteps} />
       </section>
 
       <section className="mt-10">
-        <h2 className="text-2xl font-bold text-slate-950">Despliegue continuo</h2>
-        <p className="mt-2 leading-relaxed text-slate-700">
+        <h2 className="text-2xl font-bold text-ink-950">Despliegue continuo</h2>
+        <p className="mt-2 leading-relaxed text-ink-700">
           Se ejecuta cuando la integración del commit enviado a <code>main</code> termina correctamente.
         </p>
         <WorkflowSteps steps={deploymentSteps} />
       </section>
 
-      <details className="mt-10 border-t border-slate-200 pt-5">
-        <summary className="mb-4 cursor-pointer font-semibold text-indigo-800">Ver el archivo ci-cd.yml completo</summary>
+      <details className="mt-10 border-t border-ink-200 pt-5">
+        <summary className="mb-4 cursor-pointer font-semibold text-sage-800">Ver el archivo ci-cd.yml completo</summary>
         <YamlBlock source={workflowSource} label="Archivo ci-cd.yml completo" />
       </details>
     </main>
